@@ -1,20 +1,56 @@
-// ConsoleApplication1.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include "UrbanEase.h"
 
-int main()
+using namespace std;
+
+
+Coordinates :: Coordinates(double lon, double lat)
 {
-    std::cout << "Hello World!\n";
+	longitude = lon;
+	latitude = lat;
+}
+Coordinates :: Coordinates()
+{
+	longitude = 0;
+	latitude = 0;
+}
+// Copy Constructor
+
+Coordinates :: Coordinates(const Coordinates& obj)
+{
+	longitude = obj.longitude;
+	latitude = obj.latitude;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+// Getters
+double Coordinates :: getLon() const
+{
+	return longitude;
+}
+double Coordinates :: getLat() const
+{
+	return latitude;
+}
+// Setter
+void Coordinates :: setLon(double longi)
+{
+	longitude = longi;
+}
+void Coordinates :: setLat(double lati)
+{
+	latitude = lati;
+}
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+//== Operator overloading
+bool Coordinates ::  operator == (const Coordinates& obj)
+{
+	if (longitude == obj.longitude && latitude == obj.latitude)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+}
