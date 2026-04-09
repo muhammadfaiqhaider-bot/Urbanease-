@@ -97,3 +97,54 @@ public:
 		delete[]monthlyCustomers;
 	}
 };
+
+
+
+
+class Forecast
+{
+private:
+	double predictedSales;
+	double confidenceLevel;
+	bool warningFlag;
+	int monthOffset;
+
+public:
+	Forecast();
+	Forecast(double pre, double conf, bool flag, int mof);
+	// Getters
+	double getPredicetedSale();
+	double getConfidenceLevel();
+	bool getWarningFlag();
+	int getmonthOffset();
+
+	//Setters
+	void setPredicetedSale(double sale);
+	void setConfidencelevel(double cLevel);
+	void setWarningFlag(bool flag);
+	void setmonthOffset(int mos);
+	// Copy Constructor
+	Forecast(const Forecast& obj);
+	
+
+	// Operator overloading
+	Forecast operator +(const Forecast& obj);
+	Forecast& operator ++();
+	Forecast operator ++(int);
+
+
+	void computeForecast(const Analytics& a);
+	
+	
+	friend ostream& operator<< (ostream& out, const Forecast& obj)
+	{
+		out << "Prediction Sales : " << obj.predictedSales << endl;
+		out << "Confidence Level : " << obj.confidenceLevel << endl;
+		out << "Warning Flag : " << obj.warningFlag << endl;
+		return out;
+	}
+
+
+
+	~Forecast() {};
+};

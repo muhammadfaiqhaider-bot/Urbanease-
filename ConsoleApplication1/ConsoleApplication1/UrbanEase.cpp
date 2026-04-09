@@ -170,7 +170,7 @@ void Analytics::computeCompositeScore()
 	double b = getAverageMonthlyGrowth();
 	double c = getTotalProfit();
 
-	double compScore = (c * 0.5) + (a * 0.3) + (b * 0.2);
+	compositeScore = (c * 0.5) + (a * 0.3) + (b * 0.2);
 	
 }
 
@@ -218,3 +218,146 @@ bool Analytics :: operator>(const Analytics& obj) const
 
 
 
+//==============================================
+//============Forecast Class====================
+//==============================================
+
+
+Forecast::Forecast()
+{
+	predictedSales = 0;
+	confidenceLevel = 0;
+	warningFlag = false;
+	monthOffset = 0;
+}
+
+Forecast::Forecast(double pre, double conf, bool flag, int mof)
+{
+	predictedSales = pre;
+	confidenceLevel = conf;
+	warningFlag = flag;
+	monthOffset = mof;
+}
+
+Forecast::Forecast(const Forecast& obj)
+{
+	predictedSales = obj.predictedSales;
+	confidenceLevel = obj.confidenceLevel;
+	warningFlag = obj.warningFlag;
+	monthOffset = obj.monthOffset;
+}
+
+double Forecast::getPredicetedSale() 
+{
+	return predictedSales;
+}
+double Forecast::getConfidenceLevel()
+{
+	return confidenceLevel;
+}
+bool Forecast::getWarningFlag()
+{
+	return warningFlag;
+}
+int Forecast::getmonthOffset()
+{
+	return monthOffset;
+}
+
+
+void Forecast :: setPredicetedSale(double sale)
+{
+	predictedSales = sale;
+}
+void Forecast::setConfidencelevel(double cLevel)
+{
+	confidenceLevel = cLevel;
+}
+void Forecast :: setWarningFlag(bool flag)
+{
+	warningFlag = flag;
+}
+void Forecast :: setmonthOffset(int mos)
+{
+	monthOffset = mos;
+}
+
+
+
+ Forecast Forecast :: operator +(const Forecast& obj)
+{
+	Forecast temp;
+	temp.predictedSales = predictedSales + obj.predictedSales;
+	temp.confidenceLevel = (confidenceLevel + obj.confidenceLevel) / 2;
+	temp.warningFlag = (warningFlag || obj.warningFlag);
+	return temp;
+}
+
+ Forecast& Forecast::operator++()
+{
+	monthOffset++;
+	return *this;
+}
+Forecast Forecast :: operator ++(int)
+{
+	Forecast temp = *this;
+	monthOffset++;
+	return temp;
+}
+
+void Forecast :: computeForecast(const Analytics& a)
+{
+	
+	double lastMonth = a.getmonthlyScores(23);  
+	double secondLast = a.getmonthlyScores(22);   
+	double ThirdLast = a.getmonthlyScores(21); 
+
+	double temp = lastMonth + secondLast + ThirdLast;
+	temp = temp / 3;
+	double recentTrend = lastMonth - ThirdLast;
+	temp = temp + (recentTrend * 0.3);
+	setPredicetedSale(temp);
+
+
+	if (temp < lastMonth)
+	{
+		setWarningFlag(true);
+	}
+	else
+	{
+		setWarningFlag(false);
+	}
+	
+	double avg = 0;
+	for (int i = 18; i < 24; i++)
+	{
+		avg += a.getmonthlyScores(i);
+	}
+	avg = avg / 6;
+
+
+	double totalDeviation = 0;
+	for (int i = 18; i < 24; i++)
+	{
+		double Dev = a.getmonthlyScores(i) - avg;
+		if (Dev < 0)
+		{
+			Dev = -Dev;
+		}
+		totalDeviation += Dev;
+	}
+	double avgDeviation = totalDeviation / 6;
+
+	double confidence = 100 - (avgDeviation / temp * 100);
+	if (confidence < 0)
+	{
+		confidence = 0;
+	}
+	if (confidence > 100)
+	{
+		confidence = 100;
+	}
+
+	setConfidencelevel(confidence);
+
+}
