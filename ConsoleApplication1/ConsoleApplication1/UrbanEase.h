@@ -148,3 +148,154 @@ public:
 
 	~Forecast() {};
 };
+
+
+
+
+class Person
+{
+protected:
+	string name;
+	int age;
+	string CNIC;
+public:
+	Person();
+	Person(string n, int ag, string cnic);
+	Person(const Person& obj);
+	
+
+	string getName() const;	
+	string getCNIC() const;
+	int getAge()const;
+	
+
+	void setName(string na);	
+	void setAge(int ag);
+	void setCNIC(string cnic);
+	
+
+	virtual double getSalary() const = 0;      
+	virtual string getRole() const = 0;        
+	virtual void display() const = 0;         
+
+	bool operator==(const Person& obj) const;
+	
+
+	friend ostream& operator << (ostream& out, Person& obj)
+	{
+		out << obj.CNIC << endl;
+		out << obj.name << endl;
+		out << obj.age << endl;
+		return out;
+
+	}
+
+	virtual ~Person()
+	{}
+};
+
+
+class Employee : public Person
+{
+protected:
+	double basicSalary;
+	string department;
+
+public:
+	// Constructors
+	Employee();
+	Employee(string na, int ag, string cnic, double sal, string dep);
+	Employee(const Employee& obj);
+
+
+	double getBaseSalary() const;
+	string getDepartment() const;
+	
+
+	void setBaseSalary(double sal);
+	void setDepartment(string dep);
+	
+
+	virtual double getSalary() const override
+	{
+		return basicSalary;
+	}
+	virtual string getRole() const override
+	{
+		return "Employee";
+	}
+	virtual void display() const override
+	{
+		cout << "Role: " << getRole() << endl;
+		cout << "Name: " << name << endl;
+		cout << "Age: " << age << endl;
+		cout << "CNIC: " << CNIC << endl;
+		cout << "Department: " << department << endl;
+		cout << "Salary: " << basicSalary << endl;
+	}
+
+	Employee& operator++();
+	Employee operator++(int);
+	
+
+	Employee& operator--();
+	Employee operator--(int);
+	
+	virtual ~Employee() {}
+};
+
+
+
+class Manager : public Employee
+{
+protected:
+	double bonus;
+	string region;
+public:
+	Manager();
+	
+	Manager(string na, int ag, string cnic, double sal, string dep, double bo, string reg);
+	
+
+	Manager(const Manager& obj);
+	
+	double getBonus()const;
+	
+	string getRegion()const;
+	
+
+	void setBonus(double bo);
+	
+	void setRegion(string reg);
+	
+
+
+	virtual double getSalary() const override
+	{
+		return basicSalary + bonus;
+	}
+
+	virtual string getRole() const override
+	{
+		return "Manager";
+	}
+
+	virtual void display() const override
+	{
+		cout << "Role: " << getRole() << endl;
+		cout << "Name: " << name << endl;
+		cout << "Age: " << age << endl;
+		cout << "CNIC: " << CNIC << endl;
+		cout << "Department: " << department << endl;
+		cout << "Basic Salary: " << basicSalary << endl;
+		cout << "Bonus: " << bonus << endl;
+		cout << "Total Salary: " << getSalary() << endl;
+		cout << "Region: " << region << endl;
+	}
+
+
+	virtual ~Manager()
+	{
+
+	}
+};

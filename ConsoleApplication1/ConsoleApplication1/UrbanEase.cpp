@@ -361,3 +361,224 @@ void Forecast :: computeForecast(const Analytics& a)
 	setConfidencelevel(confidence);
 
 }
+
+
+//===================================
+//=========PERSON CLASS==============
+//===================================
+
+
+
+Person :: Person()
+{
+	name = "";
+	age = 0;
+	CNIC = "";
+}
+Person:: Person(string n, int ag, string cnic)
+{
+	name = n;
+	CNIC = cnic;
+	age = ag;
+}
+
+Person::Person(const Person& obj)
+{
+	name = obj.name;
+	CNIC = obj.CNIC;
+	age = obj.age;
+}
+
+
+string Person::getName() const
+{
+	return name;
+}
+string Person::getCNIC() const
+{
+	return CNIC;
+}
+int Person::getAge()const
+{
+	return age;
+}
+
+
+void Person::setName(string na)
+{
+	name = na;
+}
+void Person::setAge(int ag)
+{
+	age = ag;
+}
+void Person::setCNIC(string cnic)
+{
+	CNIC = cnic;
+}
+
+
+
+
+bool Person ::  operator==(const Person& obj) const
+{
+	return CNIC == obj.CNIC;
+}
+
+
+
+
+
+
+
+//===================================
+//=========EMPLOYEE CLASS==============
+//===================================
+
+
+
+
+
+Employee :: Employee()
+{
+	basicSalary = 0;
+	department = "";
+}
+
+Employee :: Employee(string na, int ag, string cnic, double sal, string dep)
+{
+	name = na;
+	CNIC = cnic;
+	age = ag;
+	basicSalary = sal;
+	department = dep;
+}
+
+// Copy Constructor
+Employee::Employee(const Employee& obj)
+{
+	name = obj.name;
+	CNIC = obj.CNIC;
+	age = obj.age;
+	basicSalary = obj.basicSalary;
+	department = obj.department;
+}
+
+// Getters
+double Employee::getBaseSalary() const
+{
+	return basicSalary;
+}
+string Employee::getDepartment() const
+{
+	return department;
+}
+
+// Setters
+void Employee::setBaseSalary(double sal)
+{
+	basicSalary = sal;
+}
+void Employee::setDepartment(string dep)
+{
+	department = dep;
+}
+
+
+
+// Increment Operators
+Employee& Employee ::operator++()
+{
+	basicSalary = basicSalary * 1.10;
+	return *this;
+}
+Employee Employee ::operator++(int)
+{
+	Employee temp = *this;
+	basicSalary = basicSalary * 1.10;
+	return temp;
+}
+
+// Decrement Operators
+Employee& Employee ::operator--()
+{
+	basicSalary = basicSalary * 0.90;
+	return *this;
+}
+Employee Employee ::operator--(int)
+{
+	Employee temp = *this;
+	basicSalary = basicSalary * 0.90;
+	return temp;
+}
+
+
+
+
+
+
+
+
+
+//===================================
+//=========MANAGER CLASS==============
+//===================================
+
+
+
+
+
+
+
+Manager :: Manager()
+{
+	bonus = 0;
+	region = "";
+}
+Manager::Manager(string na, int ag, string cnic, double sal, string dep, double bo, string reg)
+{
+	name = na;
+	age = ag;
+	CNIC = cnic;
+	basicSalary = sal;
+	department = dep;
+	bonus = bo;
+	region = reg;
+}
+
+Manager::Manager(const Manager& obj)
+{
+	name = obj.name;
+	age = obj.age;
+	CNIC = obj.CNIC;
+	basicSalary = obj.basicSalary;
+	department = obj.department;
+	bonus = obj.bonus;
+	region = obj.region;
+}
+
+double Manager::getBonus()const
+{
+	return bonus;
+}
+string Manager::getRegion()const
+{
+	return region;
+}
+
+void Manager::setBonus(double bo)
+{
+	bonus = bo;
+}
+void Manager::setRegion(string reg)
+{
+	region = reg;
+}
+
+
+
+
+
+
+
+
