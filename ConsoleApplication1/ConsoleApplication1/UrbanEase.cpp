@@ -842,7 +842,9 @@ void Manager::setRegion(string reg)
 
 
 
-
+	//=================================
+	//========CLUSTER CLASS============
+	//=================================
 
 
 
@@ -1020,3 +1022,195 @@ void Manager::setRegion(string reg)
 	
 		
 	
+
+	//=================================
+	//========REPORT CLASS============
+	//=================================
+
+		
+			Report :: Report()
+			{
+				title = "";
+				rankedStores = nullptr;
+				storeCount = 0;
+				storeCapacity = 0;
+				rankCount = 0;
+			}
+			Report::Report(string tit, int cap)
+			{
+				title = tit;
+				storeCapacity = cap;
+				storeCount = 0;
+				rankCount = 0;
+				rankedStores = new Store * [storeCapacity];
+				for (int i = 0; i < storeCapacity; i++)
+				{
+					rankedStores[i] = nullptr;
+				}
+			}
+
+			Report::Report(const Report& obj)
+			{
+				title = obj.title;
+				storeCount = obj.storeCount;
+				rankCount = obj.rankCount;
+				storeCapacity = obj.storeCapacity;
+				rankedStores = new Store * [storeCapacity];
+				for (int i = 0; i < storeCapacity; i++)
+				{
+					rankedStores[i] = obj.rankedStores[i];
+				}
+			}
+
+
+			void Report::addStore(Store* st)
+			{
+				if (storeCount < storeCapacity)
+				{
+					rankedStores[storeCount] = st;
+					storeCount++;
+				}
+				else
+				{
+					cout << "Capacity is fulled. Can't add more...." << endl;
+				}
+			}
+
+			void  Report::sortOnCompositeScore()
+			{
+				for (int i = 0; i < storeCount - 1; i++)
+				{
+					for (int j = 0; j < storeCount - i - 1; j++)
+					{
+						if (rankedStores[j]->getAnalytics().getcompositeScore() < rankedStores[j + 1]->getAnalytics().getcompositeScore())
+
+						{
+							Store* temp = rankedStores[j];
+							rankedStores[j] = rankedStores[j + 1];
+							rankedStores[j + 1] = temp;
+						}
+					}
+				}
+			}
+
+			void Report::sortOnProfit()
+			{
+				for (int i = 0; i < storeCount - 1; i++)
+				{
+					for (int j = 0; j < storeCount - 1 - i; j++)
+					{
+						if (rankedStores[j]->getAnalytics().getTotalProfit() > rankedStores[j + 1]->getAnalytics().getTotalProfit())
+						{
+							Store* temp = rankedStores[j];
+							rankedStores[j] = rankedStores[j + 1];
+							rankedStores[j + 1] = temp;
+						}
+					}
+				}
+			}
+			
+		
+			void Report::sortOnGrowth()
+			{
+				for (int i = 0; i < storeCount-1; i++)
+				{
+					for (int j = 0; j < storeCount - i - 1;j++)
+					{
+						if (rankedStores[j]->getAnalytics().getAverageMonthlyGrowth() > rankedStores[j + 1]->getAnalytics().getAverageMonthlyGrowth())
+						{
+							Store* temp = rankedStores[j];
+							rankedStores[j] = rankedStores[j + 1];
+							rankedStores[j + 1] = temp;
+						}
+					}
+				}
+			}
+
+			void Report::printTopStore(int n)const
+			{
+				cout << "Top " << n << " stores across all Pakistan" << endl;
+				int limit;
+				if (n < storeCount)
+				{
+					limit = n;
+				}
+				else
+				{
+					limit = storeCount;
+				}
+				for (int i = 0; i < limit; i++)
+				{
+					cout << "  Rank:   " << i + 1 << endl;
+					cout << "  ID:     " << rankedStores[i]->getStoreID() << endl;
+					cout << "  Name:   " << rankedStores[i]->getStoreName() << endl;
+					cout << "  City:   " << rankedStores[i]->getCity() << endl;
+					cout << "  Score:  " << rankedStores[i]->getAnalytics().getcompositeScore() << endl;
+					cout << "  Profit: " << rankedStores[i]->getAnalytics().getTotalProfit() << endl;
+					cout << "----------------------------" << endl;
+
+				}
+			}
+
+			void Report::printBottom(int n) const
+			{
+				cout << "BOTTOM " << n << " STORES " << endl;
+				int start = storeCount - n;
+				if (start < 0)
+				{
+					start = 0;
+				}
+				for (int i = storeCount - 1; i >= start; i--)
+				{
+					cout << "Rank " << storeCount - i << ":" << endl;
+					cout << "  ID:     " << rankedStores[i]->getStoreID() << endl;
+					cout << "  Name:   " << rankedStores[i]->getStoreName() << endl;
+					cout << "  City:   " << rankedStores[i]->getCity() << endl;
+					cout << "  Score:  " << rankedStores[i]->getAnalytics().getcompositeScore() << endl;
+					cout << "  Profit: " << rankedStores[i]->getAnalytics().getTotalProfit() << endl;
+					cout << "----------------------------" << endl;
+				}
+			}
+
+
+
+
+			Report Report :: operator++(int)
+			{
+				Report temp = *this;
+				rankCount++;
+				return temp;
+			}
+
+
+			Report& Report :: operator++()
+			{
+				rankCount++;
+				return *this;
+			}
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+		

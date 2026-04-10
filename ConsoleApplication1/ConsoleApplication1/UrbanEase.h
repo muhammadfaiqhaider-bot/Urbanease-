@@ -368,3 +368,170 @@ public:
 		delete[]staff;
 	}
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Cluster
+{
+private:
+	string clusterName;
+	Store** stores;
+	int storeCount;
+	int capacity;
+	double Revenue;
+	int subClusterCount;
+	Cluster* subClusters;
+
+public:
+	// Default Constructor
+	Cluster();
+	Cluster(string name, int capac);
+	Cluster(const Cluster& obj);
+	
+
+	// Destructor
+	~Cluster()
+	{
+		delete[] stores;
+		stores = nullptr;
+		delete[] subClusters;
+		subClusters = nullptr;
+	}
+
+	void addStore(Store* s);
+	
+
+
+	void computeTotalRevenue();
+	
+
+	void SubClusters(int k);
+	
+
+	// Getters
+	Store* getStore(int index) const;
+	
+	int getStoreCount() const;
+
+	double getTotalRevenue() const;
+	
+	string getClusterName() const;
+	
+	Cluster* getSubCluster(int index) const;
+	
+	int getSubClusterCount() const;
+	
+
+	Cluster operator+(const Cluster& obj);
+	
+
+	// operator
+	friend ostream& operator<<(ostream& out, const Cluster& obj)
+	{
+		out << "Cluster Name: " << obj.clusterName << endl;
+		out << "No. of Stores: " << obj.storeCount << endl;
+		out << "Total Revenue: " << obj.Revenue << endl;
+		out << "Stores:" << endl;
+		for (int i = 0; i < obj.storeCount; i++)
+		{
+			out << "  ID: " << obj.stores[i]->getStoreID() << "  Name: " << obj.stores[i]->getStoreName() << endl;
+		}
+
+		if (obj.subClusters != nullptr)
+		{
+			out << "Sub Clusters:" << endl;
+			{
+				for (int i = 0; i < obj.subClusterCount; i++)
+					out << obj.subClusters[i];
+			}
+
+		}
+		return out;
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Report
+{
+private:
+	string title;
+	Store** rankedStores;
+	int storeCount;
+	int storeCapacity;
+	int rankCount;
+
+public:
+	Report();
+	Report(string tit, int cap);
+	Report(const Report& obj);
+	
+
+
+	void addStore(Store* st);
+	void sortOnCompositeScore();
+	void sortOnProfit();
+	void sortOnGrowth();
+	void printTopStore(int n)const;
+	void printBottom(int n) const;
+	
+
+	Report operator++(int);
+	Report& operator++();
+	
+
+	friend ostream& operator<<(ostream& out, const Report& obj)
+	{
+
+		out << "REPORT: " << obj.title << endl;
+		out << "Total Stores: " << obj.storeCount << endl;
+		for (int i = 0; i < obj.storeCount; i++)
+		{
+			out << "Rank " << i + 1 << ": " << obj.rankedStores[i]->getStoreName() << endl;
+			out << " | Score: " << obj.rankedStores[i]->getAnalytics().getcompositeScore() << endl;
+			out << " | Profit: " << obj.rankedStores[i]->getAnalytics().getTotalProfit() << endl;
+
+		}
+		return out;
+	}
+
+
+
+	~Report()
+	{
+		delete[] rankedStores;
+		rankedStores = nullptr;
+	}
+};
