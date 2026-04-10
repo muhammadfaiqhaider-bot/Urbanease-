@@ -580,5 +580,114 @@ void Manager::setRegion(string reg)
 
 
 
+//===================================
+//=========STORE CLASS==============
+//===================================
+
+
+
+	Store :: Store()
+	{
+		ID = "";
+		storeName = "";
+		city = "";
+		staffCount = 0;
+		staff = nullptr;
+	}
+	Store::Store(string id, string name, string c, Coordinates loc, Manager mgr, int scount)
+	{
+		ID = id;
+		storeName = name;
+		city = c;
+		location = loc;
+		manager = mgr;
+		staffCount = scount;
+		staff = new Employee[scount];	
+
+	}
+	Store::Store(const Store& obj)
+	{
+		ID = obj.ID;
+		storeName = obj.storeName;
+		city = obj.city;
+		location = obj.location;
+		manager = obj.manager;
+		staffCount = obj.staffCount;
+		for (int i = 0; i < staffCount; i++)
+		{
+			staff[i] = obj.staff[i];
+		}
+	}
+
+
+
+
+	// Getters
+	string Store::getStoreID()const
+	{
+		return ID;
+	}
+	string Store::getStoreName()const
+	{
+		return storeName;
+	}
+	string Store::getCity()const
+	{
+		return city;
+	}
+	Coordinates& Store::getLocation()
+	{
+		return location;
+	}
+	Analytics& Store:: getAnalytics()
+	{
+		return analytic;
+	}
+	Forecast& Store::getForecast()
+	{
+		return forecast;
+	}
+	Manager& Store::getManager()
+	{
+		return manager;
+	}
+	int Store::getStaffCount()const
+	{
+		return staffCount;
+	}
+	Employee& Store::getStaff(int index)
+	{
+		return staff[index];
+	}
+
+
+	// Setters
+	void Store::setStoreID(string id)
+	{
+		ID = id;
+	}
+	void Store::setStoreName(string name)
+	{
+		storeName = name;
+	}
+	void Store::setCityName(string cname)
+	{
+		city = cname;
+	}
+
+	bool Store :: operator == (const Store& obj)
+	{
+		if (ID == obj.ID)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+
+
 
 
