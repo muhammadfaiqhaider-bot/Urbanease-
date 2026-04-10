@@ -1,5 +1,7 @@
 #include <iostream>
 #include "UrbanEase.h"
+#include <fstream>   
+#include <string> 
 
 using namespace std;
 
@@ -247,19 +249,19 @@ Forecast::Forecast(const Forecast& obj)
 	monthOffset = obj.monthOffset;
 }
 
-double Forecast::getPredicetedSale() 
+double Forecast::getPredicetedSale() const
 {
 	return predictedSales;
 }
-double Forecast::getConfidenceLevel()
+double Forecast::getConfidenceLevel()const
 {
 	return confidenceLevel;
 }
-bool Forecast::getWarningFlag()
+bool Forecast::getWarningFlag()const
 {
 	return warningFlag;
 }
-int Forecast::getmonthOffset()
+int Forecast::getmonthOffset()const
 {
 	return monthOffset;
 }
@@ -613,6 +615,7 @@ void Manager::setRegion(string reg)
 		location = obj.location;
 		manager = obj.manager;
 		staffCount = obj.staffCount;
+		staff = new Employee[staffCount];
 		for (int i = 0; i < staffCount; i++)
 		{
 			staff[i] = obj.staff[i];
@@ -688,6 +691,332 @@ void Manager::setRegion(string reg)
 	}
 
 
+	void Store::saveToFile(ofstream& out) const
+	{
+		// Basic info
+		out << ID << "\n";
+		out << storeName << "\n";
+		out << city << "\n";
+
+		// Coordinates
+		out << location.getLat() << "\n";
+		out << location.getLon() << "\n";
+
+		// Analytics — 24 months each
+		for (int i = 0; i < 24; i++)
+			out << analytic.getmonthlyScores(i) << "\n";
+
+		for (int i = 0; i < 24; i++)
+			out << analytic.getmonthlyCosts(i) << "\n";
+
+		for (int i = 0; i < 24; i++)
+			out << analytic.getmonthlyCustomers(i) << "\n";
+
+		// Forecast
+		out << forecast.getPredicetedSale() << "\n";
+		out << forecast.getConfidenceLevel() << "\n";
+		out << forecast.getWarningFlag() << "\n";
+		out << forecast.getmonthOffset() << "\n";
+
+		// Manager
+		out << manager.getName() << "\n";
+		out << manager.getAge() << "\n";
+		out << manager.getCNIC() << "\n";
+		out << manager.getBaseSalary() << "\n";
+		out << manager.getDepartment() << "\n";
+		out << manager.getBonus() << "\n";
+		out << manager.getRegion() << "\n";
+
+		// Staff
+		out << staffCount << "\n";
+		for (int i = 0; i < staffCount; i++)
+		{
+			out << staff[i].getName() << "\n";
+			out << staff[i].getAge() << "\n";
+			out << staff[i].getCNIC() << "\n";
+			out << staff[i].getBaseSalary() << "\n";
+			out << staff[i].getDepartment() << "\n";
+		}
+	}
 
 
 
+
+	void Store::loadFromFile(ifstream& in)
+	{
+		// Basic info
+		getline(in, ID);
+		getline(in, storeName);
+		getline(in, city);
+
+		// Coordinates
+		double lat, lon;
+		in >> lat >> lon;
+		in.ignore();
+		location.setLat(lat);
+		location.setLon(lon);
+
+		// Analytics — 24 months each
+		double sale, cost;
+		int customer;
+		for (int i = 0; i < 24; i++)
+		{
+			in >> sale;
+			analytic.setmonthlySales(i, sale);
+		}
+		for (int i = 0; i < 24; i++)
+		{
+			in >> cost;
+			analytic.setmonthlyCosts(i, cost);
+		}
+		for (int i = 0; i < 24; i++)
+		{
+			in >> customer;
+			analytic.setmonthlyCustomers(i, customer);
+		}
+		in.ignore();
+
+		// Forecast
+		double pSale, conf;
+		bool warn;
+		int offset;
+		in >> pSale >> conf >> warn >> offset;
+		in.ignore();
+		forecast.setPredicetedSale(pSale);
+		forecast.setConfidencelevel(conf);
+		forecast.setWarningFlag(warn);
+		forecast.setmonthOffset(offset);
+
+		// Manager
+		string mName, mCNIC, mDept, mRegion;
+		int mAge;
+		double mSalary, mBonus;
+		getline(in, mName);
+		in >> mAge;
+		in.ignore();
+		getline(in, mCNIC);
+		in >> mSalary;
+		in.ignore();
+		getline(in, mDept);
+		in >> mBonus;
+		in.ignore();
+		getline(in, mRegion);
+		manager.setName(mName);
+		manager.setAge(mAge);
+		manager.setCNIC(mCNIC);
+		manager.setBaseSalary(mSalary);
+		manager.setDepartment(mDept);
+		manager.setBonus(mBonus);
+		manager.setRegion(mRegion);
+
+		// Staff
+		in >> staffCount;
+		in.ignore();
+		delete[] staff;
+		staff = new Employee[staffCount];
+		for (int i = 0; i < staffCount; i++)
+		{
+			string eName, eCNIC, eDept;
+			int eAge;
+			double eSalary;
+			getline(in, eName);
+			in >> eAge;
+			in.ignore();
+			getline(in, eCNIC);
+			in >> eSalary;
+			in.ignore();
+			getline(in, eDept);
+			staff[i].setName(eName);
+			staff[i].setAge(eAge);
+			staff[i].setCNIC(eCNIC);
+			staff[i].setBaseSalary(eSalary);
+			staff[i].setDepartment(eDept);
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		// Default Constructor
+		Cluster :: Cluster()
+		{
+			clusterName = "";
+			storeCount = 0;
+			capacity = 0;
+			Revenue = 0;
+			stores = nullptr;    
+			subClusterCount = 0;
+			subClusters = nullptr;
+		}
+
+		// Parameterized Constructor
+		Cluster::Cluster(string name, int capac)
+		{
+			clusterName = name;
+			capacity = capac;
+			storeCount = 0;        
+			Revenue = 0;           
+			subClusterCount = 0;   
+			subClusters = nullptr; 
+			stores = new Store * [capacity];
+			for (int i = 0; i < capacity; i++)
+			{
+				stores[i] = nullptr;
+			}			
+		}
+
+		
+		Cluster:: Cluster(const Cluster& obj)
+		{
+			clusterName = obj.clusterName;
+			capacity = obj.capacity;
+			storeCount = obj.storeCount;
+			Revenue = obj.Revenue;
+			subClusterCount = obj.subClusterCount;
+
+			
+			if (obj.stores != nullptr)
+			{
+				stores = new Store * [capacity];
+				for (int i = 0; i < capacity; i++)
+				{
+					stores[i] = obj.stores[i];
+				}				
+			}
+			else
+			{
+				stores = nullptr;
+			}
+				
+
+			if (obj.subClusters != nullptr)
+			{
+				subClusters = new Cluster[subClusterCount];
+				for (int i = 0; i < subClusterCount; i++)
+				{
+					subClusters[i] = obj.subClusters[i];
+				}				
+			}
+			else
+			{
+				subClusters = nullptr;
+			}
+				
+		}
+
+		// Destructor
+		
+
+	
+		void Cluster:: addStore(Store* s)
+		{
+			if (storeCount < capacity)
+			{
+				stores[storeCount] = s;
+				storeCount++;
+			}
+			else
+				cout << "Region is fulled with Stores. No need for more....." << endl;
+		}
+
+	
+		void Cluster:: computeTotalRevenue()
+		{
+			double total = 0;
+			for (int i = 0; i < storeCount; i++)
+			{
+				total += stores[i]->getAnalytics().getTotalannualSale();
+			}
+			Revenue = total;
+		}
+
+		void Cluster:: SubClusters(int k)
+		{
+			subClusterCount = k;
+			subClusters = new Cluster[k];
+
+			subClusters[0] = Cluster("Top", capacity);
+			subClusters[1] = Cluster("Average", capacity);
+			subClusters[2] = Cluster("Struggling", capacity);
+
+			for (int i = 0; i < storeCount; i++)
+			{
+				double profit = stores[i]->getAnalytics().getTotalProfit();
+				if (profit > 500000)
+				{
+					subClusters[0].addStore(stores[i]);
+				}
+					
+				else if (profit > 200000)
+				{
+					subClusters[1].addStore(stores[i]);
+				}
+					
+				else
+				{
+					subClusters[2].addStore(stores[i]);
+				}
+				
+			}
+		}
+
+		// Getters
+		Store* Cluster:: getStore(int index) const
+		{
+			return stores[index];  
+		}
+		int Cluster:: getStoreCount() const
+		{
+			return storeCount;
+		}
+		double Cluster:: getTotalRevenue() const
+		{
+			return Revenue;
+		}
+		string Cluster:: getClusterName() const
+		{
+			return clusterName;
+		}
+		Cluster* Cluster:: getSubCluster(int index) const
+		{
+			return &subClusters[index];
+		}
+		int Cluster:: getSubClusterCount() const
+		{
+			return subClusterCount;
+		}
+
+	
+		Cluster Cluster :: operator+(const Cluster& obj)
+		{
+			int totalCapacity = storeCount + obj.storeCount;
+			Cluster temp;
+			temp.clusterName = clusterName + "+" + obj.clusterName;
+			temp.capacity = totalCapacity;
+			temp.stores = new Store * [totalCapacity];
+
+			for (int i = 0; i < storeCount; i++)
+				temp.stores[i] = stores[i];
+
+			for (int i = 0; i < obj.storeCount; i++)
+				temp.stores[storeCount + i] = obj.stores[i];
+
+			temp.storeCount = totalCapacity;
+			temp.Revenue = Revenue + obj.Revenue;
+			return temp;
+		}
+
+	
+		
+	

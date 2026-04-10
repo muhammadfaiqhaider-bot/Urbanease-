@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <fstream>  
+#include <string> 
 using namespace std;
 
 class Coordinates
@@ -113,10 +115,10 @@ public:
 	Forecast();
 	Forecast(double pre, double conf, bool flag, int mof);
 	// Getters
-	double getPredicetedSale();
-	double getConfidenceLevel();
-	bool getWarningFlag();
-	int getmonthOffset();
+	double getPredicetedSale()const;
+	double getConfidenceLevel()const;
+	bool getWarningFlag()const;
+	int getmonthOffset()const;
 
 	//Setters
 	void setPredicetedSale(double sale);
@@ -253,19 +255,14 @@ protected:
 	string region;
 public:
 	Manager();
-	
 	Manager(string na, int ag, string cnic, double sal, string dep, double bo, string reg);
-	
-
 	Manager(const Manager& obj);
 	
 	double getBonus()const;
-	
 	string getRegion()const;
 	
 
 	void setBonus(double bo);
-	
 	void setRegion(string reg);
 	
 
@@ -274,12 +271,10 @@ public:
 	{
 		return basicSalary + bonus;
 	}
-
 	virtual string getRole() const override
 	{
 		return "Manager";
 	}
-
 	virtual void display() const override
 	{
 		cout << "Role: " << getRole() << endl;
@@ -297,5 +292,79 @@ public:
 	virtual ~Manager()
 	{
 
+	}
+};
+
+
+
+
+
+
+
+class Store
+{
+private:
+	string ID;
+	string storeName;
+	string city;
+	Coordinates location;
+	Analytics analytic;
+	Forecast forecast;
+	Manager manager;
+	Employee* staff;
+	int staffCount;
+
+public:
+	Store();
+	Store(string id, string name, string c, Coordinates loc, Manager mgr, int scount);	
+	Store(const Store& obj);
+	
+
+	// Getters
+	string getStoreID()const;
+	string getStoreName()const;
+	string getCity()const;
+	Coordinates& getLocation();
+	Analytics& getAnalytics();
+	Forecast& getForecast();	
+	Manager& getManager();
+	int getStaffCount()const;
+	Employee& getStaff(int index);
+	
+
+
+	// Setters
+	void setStoreID(string id);	
+	void setStoreName(string name);	
+	void setCityName(string cname);
+	bool operator == (const Store& obj);
+	
+	void saveToFile(ofstream& out) const;
+	void loadFromFile(ifstream& in);
+
+
+	friend ostream& operator <<(ostream& out, Store& obj)
+	{
+		out << "Summary " << endl;
+		out << "ID: " << obj.ID << endl;
+		out << "Store Name: " << obj.storeName << endl;
+		out << "City: " << obj.city << endl;
+		out << "Location: " << obj.location << endl;
+		out << "Anlaytics: " << obj.analytic << endl;
+		out << "Manager: " << obj.manager << endl;
+		out << "Total Number of Staff: " << obj.staffCount << endl;
+		out << "Staff Details: ";
+		for (int i = 0; i < obj.staffCount; i++)
+		{
+			out << obj.staff[i] << endl;
+		}
+		return out;
+
+	}
+
+
+	~Store()
+	{
+		delete[]staff;
 	}
 };
