@@ -119,6 +119,8 @@ double Analytics::getcompositeScore()const
 }
 
 
+
+
 // Setters
 void Analytics::setmonthlySales(int index, double value)
 {
@@ -662,7 +664,10 @@ void Manager::setRegion(string reg)
 	{
 		return staff[index];
 	}
-
+	const Analytics& Store::getAnalytics() const
+	{
+		return analytic;
+	}
 
 	// Setters
 	void Store::setStoreID(string id)

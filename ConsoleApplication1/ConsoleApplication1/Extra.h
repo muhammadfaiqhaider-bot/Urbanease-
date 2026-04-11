@@ -1,4 +1,5 @@
 #pragma once
+#include "UrbanEase.h"
 
 Store* generateStores(int count);
 void saveAllStores(Store* stores, int count);

@@ -1,7 +1,10 @@
 #include <iostream>
+#include <string>
 #include "UrbanEase.h"
-#include "Extra.h"
-
+#include "extra.h"
+#include <cstdlib>  
+#include <ctime>    
+using namespace std;
 
 Store* generateStores(int count)
 {
@@ -73,7 +76,7 @@ Store* generateStores(int count)
 
         // Till Now we Have setted the STORE Name/ID/City in which store locatied.
 
-        string city = cities[cityVal];
+       
         double latitude = 77.0, longitude = 33.50;
         if (cityVal == 1)
         {
@@ -157,14 +160,6 @@ Store* generateStores(int count)
     }
     return stores;
 }
-
-
-
-
-
-
-
-
 
 
 

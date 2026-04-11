@@ -60,6 +60,7 @@ public:
 	double getmonthlyCosts(int index) const;
 	double getmonthlyCustomers(int index) const;
 	double getcompositeScore()const;
+	
 	// Setters
 	void setmonthlySales(int index, double value);
 	void setmonthlyCosts(int index, double value);
@@ -330,6 +331,7 @@ public:
 	Manager& getManager();
 	int getStaffCount()const;
 	Employee& getStaff(int index);
+	const Analytics& getAnalytics() const;
 	
 
 
