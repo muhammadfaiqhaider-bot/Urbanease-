@@ -678,6 +678,19 @@ void Manager::setRegion(string reg)
 		city = cname;
 	}
 
+	void Store :: setManager(const Manager& mgr)
+	{
+		manager = mgr;
+	}
+	void Store :: setStaff(int count)
+	{
+		staffCount = count;
+		delete[] staff;
+		staff = new Employee[count];
+	}
+
+
+
 	bool Store :: operator == (const Store& obj)
 	{
 		if (ID == obj.ID)
@@ -689,6 +702,8 @@ void Manager::setRegion(string reg)
 			return false;
 		}
 	}
+
+
 
 
 	void Store::saveToFile(ofstream& out) const
@@ -749,6 +764,7 @@ void Manager::setRegion(string reg)
 		getline(in, storeName);
 		getline(in, city);
 
+		
 		// Coordinates
 		double lat, lon;
 		in >> lat >> lon;
@@ -1203,14 +1219,3 @@ void Manager::setRegion(string reg)
 
 
 
-		
-
-
-
-
-
-
-
-
-
-		

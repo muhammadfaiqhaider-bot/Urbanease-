@@ -337,6 +337,8 @@ public:
 	void setStoreID(string id);	
 	void setStoreName(string name);	
 	void setCityName(string cname);
+	void setManager(const Manager& mgr);
+	void setStaff(int count);
 	bool operator == (const Store& obj);
 	
 	void saveToFile(ofstream& out) const;
