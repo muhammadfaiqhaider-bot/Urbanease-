@@ -308,10 +308,10 @@ private:
 	string ID;
 	string storeName;
 	string city;
-	Coordinates location;
-	Analytics analytic;
-	Forecast forecast;
-	Manager manager;
+	Coordinates location;   // Composition Happening Here because Store class is main thing that contains all classes
+	Analytics analytic;     // Store contains these attributes Location, Analatyics, Forecasting, Manager
+	Forecast forecast;      // And if remove store location .......all of them will be removed that's why its composition 
+	Manager manager;        // Because every class depends on Store for there exsistence.....
 	Employee* staff;
 	int staffCount;
 

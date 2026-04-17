@@ -4,9 +4,14 @@
 #include "extra.h"
 #include <cstdlib>  
 #include <ctime>    
+#include <iomanip>
 #include <cmath>
 using namespace std;
 
+
+
+
+// Core function for generating IRL store using store class.......
 Store* generateStores(int count)
 {
     srand(time(0));
@@ -17,29 +22,19 @@ Store* generateStores(int count)
 
     for (int i = 0; i < count; i++)
     {
-        //Generate ID
-        string id = "PAK-";
+        string id = "PAK-"; 
         int num = i + 1;
-        if (num < 10)
-        {
-            id = id + "0000" + to_string(num);
-        }
-        else if (num < 1000 && num >= 100)
-        {
-            id = id + "000" + to_string(num);
-        }
-        else if (num < 10000 && num >= 1000)
-        {
-            id = id + "00" + to_string(num);
-        }
-        else if (num < 100000 && num >= 10000)
-        {
-            id = id + "0" + to_string(num);
-        }
-        else
-        {
-            id = id + to_string(num);
-        }
+
+        if (num < 10)          // 1-9
+            id += "0000" + to_string(num);
+        else if (num < 100)    // 10-99 (The missing part!)
+            id += "000" + to_string(num);
+        else if (num < 1000)   // 100-999
+            id += "00" + to_string(num);
+        else if (num < 10000)  // 1000-9999
+            id += "0" + to_string(num);
+        else                   // 10000+
+            id += to_string(num);
 
 
         // Pick Random City
@@ -53,14 +48,14 @@ Store* generateStores(int count)
             string area_1[] = { "Bahria Town","Samnabad","Johar Town","DHA-Lahore",
              "Lahore-Cantt", "Johar Town","Gulshan Ravi" };
 
-            name = "Pakistan UrbanEase" + area_1[rand() % 7];
+            name = "Pakistan UrbanEase " + area_1[rand() % 7];
         }
         else if (city == "Rawalpindi")
         {
             string area_2[] = { "Bahria Town", "Westridge","Sadar Rawalpindi", "Tench Bhata",
             "PWD", "Commercial Market","DHA-Islamabad","DHA-Lahore" };
 
-            name = "Pakistan UrbanEase" + area_2[rand() % 8];
+            name = "Pakistan UrbanEase " + area_2[rand() % 8];
         }
 
         else if (city == "Islamabad")
@@ -68,7 +63,7 @@ Store* generateStores(int count)
             string area_3[] = { "Bahria Town", "F6","Gulberg Greens",
             "G6", "G13", "B17","DHA-Islamabad","DHA-Lahore","I8","F10", };
 
-            name = "Pakistan UrbanEase" + area_3[rand() % 10];
+            name = "Pakistan UrbanEase " + area_3[rand() % 10];
         }
 
         stores[i].setStoreName(name);
@@ -230,6 +225,9 @@ Store* loadAllStores(int& count)
 
     file.close();
     cout << count << " stores loaded from data.txt" << endl;
+    cout << endl;
+    cout << endl;
+    cout << "===============================================================================" << endl;
     return stores;
 }
 
@@ -238,7 +236,8 @@ Store* loadAllStores(int& count)
 
 
 
-// Extra Function Needs for calculations 
+// Extra function needed for clustering depends on the distance between the strores coordinate it forms the cluster
+
 double calculateDistance(Coordinates c1, Coordinates c2) 
 {
     double latDiff = c1.getLat() - c2.getLat();
@@ -248,13 +247,13 @@ double calculateDistance(Coordinates c1, Coordinates c2)
 }
 
 
-
+// K means ALGORITHM 
 void performKMeans(Store* stores, int storeCount)
 {
     int k = 3;
     Coordinates* centroids = new Coordinates[k];
 
-    // Initializing based on YOUR generation ranges:
+   
     centroids[0] = Coordinates(74.5, 31.5); // Center of Lahore range
     centroids[1] = Coordinates(73.5, 33.5); // Center of Pindi range
     centroids[2] = Coordinates(73.5, 32.5); // Center of Islamabad range
@@ -279,7 +278,7 @@ void performKMeans(Store* stores, int storeCount)
             assignments[i] = bestK;
         }
 
-        // Update Step (Mean calculation)
+
         for (int j = 0; j < k; j++) {
             double sumLat = 0, sumLon = 0;
             int count = 0;
@@ -310,7 +309,8 @@ void performKMeans(Store* stores, int storeCount)
     // Print the results using your overloaded <<
     for (int i = 0; i < k; i++) {
         cityClusters[i].computeTotalRevenue();
-        cout << cityClusters[i] << endl;
+        cout << fixed << setprecision(2);
+        cout << cityClusters[i]  << endl;
     }
 
     // Cleanup

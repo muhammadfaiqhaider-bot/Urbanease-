@@ -4,11 +4,13 @@
 #include <string> 
 
 using namespace std;
+//+++++++++++++++++++
+// Coordinates Class
+//+++++++++++++++++++
 
-//===================================
-//========= Coordinates Class========
-//===================================
 
+// Purpose: 
+// Takes cordinates of the store location and use for displying it as well........
 Coordinates :: Coordinates(double lon, double lat)
 {
 	longitude = lon;
@@ -64,11 +66,12 @@ bool Coordinates ::  operator == (const Coordinates& obj)
 
 
 
-//==============================================
-//=================ANALYTICS CLASS==============
-//==============================================
+//+++++++++++++++++++
+// Analytics Class
+//+++++++++++++++++++
 
-
+// Purpose: 
+// Do all calculations/Stats like last 24 months sales, consuptions, profits, composite sales etc.............
 // Construcstors
 Analytics::Analytics()
 {
@@ -222,10 +225,12 @@ bool Analytics :: operator>(const Analytics& obj) const
 
 
 
-//==============================================
-//============Forecast Class====================
-//==============================================
-
+//++++++++++++++++++++++++
+//   Forecast Class
+//++++++++++++++++++++++++
+//Purpose:
+//This class is used for forcasting (predicts the stats of next months...also gives warning to the manager if 
+//warning signals is ON.......
 
 Forecast::Forecast()
 {
@@ -309,7 +314,7 @@ Forecast Forecast :: operator ++(int)
 	return temp;
 }
 
-void Forecast :: computeForecast(const Analytics& a)
+void Forecast :: computeForecast(const Analytics& a) // Association happens here
 {
 	
 	double lastMonth = a.getmonthlyScores(23);  
@@ -367,10 +372,11 @@ void Forecast :: computeForecast(const Analytics& a)
 }
 
 
-//===================================
-//=========PERSON CLASS==============
-//===================================
-
+//+++++++++++++++++++++++++++
+//      PERSON CLASS
+//+++++++++++++++++++++++++++
+//Purpose: Now here comes the Inheritance concept like how there is main thing person that has common attributes.Name, age, CNIC
+//it is parent class......we ll make child class further....
 
 
 Person :: Person()
@@ -435,14 +441,15 @@ bool Person ::  operator==(const Person& obj) const
 
 
 
-//===================================
-//=========EMPLOYEE CLASS==============
-//===================================
+//++++++++++++++++++++++
+//  EMPLOYEE CLASS
+//++++++++++++++++++++++
 
 
 
 
-
+// Purpose: Child class that inherite attributes from parent class and add new features that are particular for empolyee like its 
+// Salary and calculation for salary.......Calculation for bonus.......
 Employee :: Employee()
 {
 	basicSalary = 0;
@@ -524,15 +531,16 @@ Employee Employee ::operator--(int)
 
 
 
-//===================================
-//=========MANAGER CLASS==============
-//===================================
+//++++++++++++++++++++++
+//  Manager CLASS
+//++++++++++++++++++++++
 
 
 
 
 
-
+// Purpose: its the last class in herarichy because its superior to all inherite all things in employee and person and have 
+//its own attributes as well.........
 
 Manager :: Manager()
 {
@@ -584,11 +592,12 @@ void Manager::setRegion(string reg)
 
 
 
-//===================================
-//=========STORE CLASS==============
-//===================================
+//++++++++++++++++++++++
+//  STORE CLASS
+//++++++++++++++++++++++
 
-
+//Purpose: The core/ Important class for my program.......because this is the class that contains all the classes features and genertas 
+//my stores...forexample assigning name to stores, there location etc.........ALOS IMPORTANT NOTE (USES COMPOSTION TO LINK ALL CLASSES)
 
 	Store :: Store()
 	{
@@ -862,14 +871,15 @@ void Manager::setRegion(string reg)
 
 
 
-
-	//=================================
-	//========CLUSTER CLASS============
-	//=================================
-
+//++++++++++++++++++++++
+//  CLUSTER CLASS
+//++++++++++++++++++++++
 
 
 
+	// PUrpose: 
+	// This class is use to group all the stores in one cluster that are geographically close to each other based on there 
+	// coordinates values.......
 	
 		// Default Constructor
 		Cluster :: Cluster()
@@ -1077,7 +1087,7 @@ void Manager::setRegion(string reg)
 			if (obj.stores != nullptr) {
 				stores = new Store * [capacity];
 				for (int i = 0; i < storeCount; i++) {
-					stores[i] = obj.stores[i]; // Just copy the pointer, don't delete it twice!
+					stores[i] = obj.stores[i]; 
 				}
 			}
 			else stores = nullptr;
@@ -1088,11 +1098,13 @@ void Manager::setRegion(string reg)
 		
 	
 
-	//=================================
-	//========REPORT CLASS============
-	//=================================
+	//++++++++++++++++++++++
+	//  Report CLASS
+	//++++++++++++++++++++++
 
-		
+		// Purpose: 
+		// This class uses store data and rank them on there performance.....
+
 			Report :: Report()
 			{
 				title = "";
@@ -1193,6 +1205,12 @@ void Manager::setRegion(string reg)
 
 			void Report::printTopStore(int n)const
 			{
+				system("cls");
+				cout << "=============================================================" << endl;
+				cout << "                          SUMMARY" << endl;
+				cout << "=============================================================" << endl;
+				cout << "1- TOP 10 BEST STORES. " << endl;
+				cout << "2- 5 LOWEST REVUNUE GENERATOR STORES. " << endl;
 				cout << "Top " << n << " stores across all Pakistan" << endl;
 				int limit;
 				if (n < storeCount)
@@ -1218,6 +1236,13 @@ void Manager::setRegion(string reg)
 
 			void Report::printBottom(int n) const
 			{
+				system("cls");
+				cout << "=============================================================" << endl;
+				cout << "                          SUMMARY" << endl;
+				cout << "=============================================================" << endl;
+				cout << "1- TOP 10 BEST STORES. " << endl;
+				cout << "2- 5 LOWEST REVUNUE GENERATOR STORES. " << endl;
+				cout << "Top " << n << " stores across all Pakistan" << endl;
 				cout << "BOTTOM " << n << " STORES " << endl;
 				int start = storeCount - n;
 				if (start < 0)
@@ -1252,16 +1277,6 @@ void Manager::setRegion(string reg)
 				rankCount++;
 				return *this;
 			}
-
-
-
-
-		
-
-
-
-
-
 
 
 
