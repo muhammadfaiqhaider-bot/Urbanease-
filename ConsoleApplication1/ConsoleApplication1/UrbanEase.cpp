@@ -938,6 +938,9 @@ void Manager::setRegion(string reg)
 				
 		}
 
+
+		
+
 		// Destructor
 		
 
@@ -964,15 +967,37 @@ void Manager::setRegion(string reg)
 			Revenue = total;
 		}
 
-		void Cluster:: SubClusters(int k)
+		void Cluster::SubClusters(int k)
 		{
+			// 1. Clean up existing subClusters if this function is called twice
+			if (subClusters != nullptr) {
+				delete[] subClusters;
+			}
+
 			subClusterCount = k;
-			subClusters = new Cluster[k];
+			subClusters = new Cluster[k]; // This calls the default constructor for k clusters
 
-			subClusters[0] = Cluster("Top", capacity);
-			subClusters[1] = Cluster("Average", capacity);
-			subClusters[2] = Cluster("Struggling", capacity);
+			// 2. Set values directly WITHOUT creating temporary Cluster objects
+			// Assuming you have setters or the variables are accessible
+			if (k >= 3) {
+				subClusters[0].clusterName = "Top";
+				subClusters[0].capacity = capacity;
+				// Important: Manually allocate the stores array for the sub-cluster
+				subClusters[0].stores = new Store * [capacity];
+				subClusters[0].storeCount = 0;
 
+				subClusters[1].clusterName = "Average";
+				subClusters[1].capacity = capacity;
+				subClusters[1].stores = new Store * [capacity];
+				subClusters[1].storeCount = 0;
+
+				subClusters[2].clusterName = "Struggling";
+				subClusters[2].capacity = capacity;
+				subClusters[2].stores = new Store * [capacity];
+				subClusters[2].storeCount = 0;
+			}
+
+			// 3. Distribution logic (This part was mostly fine)
 			for (int i = 0; i < storeCount; i++)
 			{
 				double profit = stores[i]->getAnalytics().getTotalProfit();
@@ -980,17 +1005,14 @@ void Manager::setRegion(string reg)
 				{
 					subClusters[0].addStore(stores[i]);
 				}
-					
 				else if (profit > 200000)
 				{
 					subClusters[1].addStore(stores[i]);
 				}
-					
 				else
 				{
 					subClusters[2].addStore(stores[i]);
 				}
-				
 			}
 		}
 
@@ -1040,7 +1062,29 @@ void Manager::setRegion(string reg)
 			return temp;
 		}
 
-	
+		Cluster& Cluster::operator=(const Cluster& obj) {
+			if (this == &obj) return *this;
+
+			// Stop the crash by cleaning up safely
+			delete[] stores;
+			delete[] subClusters;
+
+			clusterName = obj.clusterName;
+			capacity = obj.capacity;
+			storeCount = obj.storeCount;
+			subClusterCount = obj.subClusterCount;
+
+			if (obj.stores != nullptr) {
+				stores = new Store * [capacity];
+				for (int i = 0; i < storeCount; i++) {
+					stores[i] = obj.stores[i]; // Just copy the pointer, don't delete it twice!
+				}
+			}
+			else stores = nullptr;
+
+			return *this;
+		}
+
 		
 	
 

@@ -36,6 +36,10 @@ int main()
     // 1. Run Clustering
     performKMeans(stores, storeCount);
 
+    for (int i = 0; i < storeCount; i++) {
+        stores[i].getAnalytics().computeCompositeScore();
+    }
+
     // 2. Run Ranking
     Report nationalReport("National Sales Report", storeCount);
     for (int i = 0; i < storeCount; i++)

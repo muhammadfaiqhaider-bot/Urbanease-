@@ -327,9 +327,6 @@ void performKMeans(Store* stores, int storeCount)
 
 
 
-
-
-
 int showMenu()
 {
     int choice;

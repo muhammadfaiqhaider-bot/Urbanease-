@@ -416,13 +416,16 @@ public:
 	
 
 	// Destructor
-	~Cluster() 
-	{
+	~Cluster() {
+		
 		if (stores != nullptr) {
 			delete[] stores;
-			stores = nullptr;
+			stores = nullptr; 
 		}
+
+		
 		if (subClusters != nullptr) {
+			
 			delete[] subClusters;
 			subClusters = nullptr;
 		}
@@ -450,9 +453,12 @@ public:
 	Cluster* getSubCluster(int index) const;
 	
 	int getSubClusterCount() const;
+
+	
 	
 
 	Cluster operator+(const Cluster& obj);
+	Cluster& operator=(const Cluster& obj);
 	
 
 	// operator
