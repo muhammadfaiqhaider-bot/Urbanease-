@@ -4,6 +4,7 @@
 #include "extra.h"
 #include <cstdlib>  
 #include <ctime>    
+#include <cmath>
 using namespace std;
 
 Store* generateStores(int count)
@@ -89,9 +90,9 @@ Store* generateStores(int count)
             longitude = 74.0 + (rand() % 100) / 100.0;
         }
 
-        else if (cityVal == 3)
+        else if (cityVal == 2) 
         {
-            latitude = 32.0 + (rand() % 100) / 100.0;
+            latitude = 32.0 + (rand() % 100) / 100.0; 
             longitude = 73.0 + (rand() % 100) / 100.0;
         }
 
@@ -231,6 +232,93 @@ Store* loadAllStores(int& count)
     cout << count << " stores loaded from data.txt" << endl;
     return stores;
 }
+
+
+
+
+
+
+// Extra Function Needs for calculations 
+double calculateDistance(Coordinates c1, Coordinates c2) 
+{
+    double latDiff = c1.getLat() - c2.getLat();
+    double lonDiff = c1.getLon() - c2.getLon();
+    double ans = sqrt(pow(latDiff, 2) + pow(lonDiff, 2));
+    return ans;
+}
+
+
+
+void performKMeans(Store* stores, int storeCount)
+{
+    int k = 3;
+    Coordinates* centroids = new Coordinates[k];
+
+    // Initializing based on YOUR generation ranges:
+    centroids[0] = Coordinates(74.5, 31.5); // Center of Lahore range
+    centroids[1] = Coordinates(73.5, 33.5); // Center of Pindi range
+    centroids[2] = Coordinates(73.5, 32.5); // Center of Islamabad range
+
+    int* assignments = new int[storeCount];
+    for (int i = 0; i < storeCount; i++) assignments[i] = -1;
+
+    for (int iter = 0; iter < 10; iter++) { // 10 iterations is plenty
+        // Assignment Step
+        for (int i = 0; i < storeCount; i++) {
+            double minDist = 1e9;
+            int bestK = 0;
+            for (int j = 0; j < k; j++) {
+                // Using Euclidean Distance
+                double d = sqrt(pow(stores[i].getLocation().getLat() - centroids[j].getLat(), 2) +
+                    pow(stores[i].getLocation().getLon() - centroids[j].getLon(), 2));
+                if (d < minDist) {
+                    minDist = d;
+                    bestK = j;
+                }
+            }
+            assignments[i] = bestK;
+        }
+
+        // Update Step (Mean calculation)
+        for (int j = 0; j < k; j++) {
+            double sumLat = 0, sumLon = 0;
+            int count = 0;
+            for (int i = 0; i < storeCount; i++) {
+                if (assignments[i] == j) {
+                    sumLat += stores[i].getLocation().getLat();
+                    sumLon += stores[i].getLocation().getLon();
+                    count++;
+                }
+            }
+            if (count > 0) {
+                centroids[j].setLat(sumLat / count);
+                centroids[j].setLon(sumLon / count);
+            }
+        }
+    }
+
+    // After finding the groups, we populate the actual Cluster objects
+    Cluster* cityClusters = new Cluster[k];
+    cityClusters[0] = Cluster("Lahore Region", storeCount);
+    cityClusters[1] = Cluster("Rawalpindi Region", storeCount);
+    cityClusters[2] = Cluster("Islamabad Region", storeCount);
+
+    for (int i = 0; i < storeCount; i++) {
+        cityClusters[assignments[i]].addStore(&stores[i]);
+    }
+
+    // Print the results using your overloaded <<
+    for (int i = 0; i < k; i++) {
+        cityClusters[i].computeTotalRevenue();
+        cout << cityClusters[i] << endl;
+    }
+
+    // Cleanup
+    delete[] centroids;
+    delete[] assignments;
+    delete[] cityClusters;
+}
+
 
 
 

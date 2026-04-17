@@ -416,12 +416,16 @@ public:
 	
 
 	// Destructor
-	~Cluster()
+	~Cluster() 
 	{
-		delete[] stores;
-		stores = nullptr;
-		delete[] subClusters;
-		subClusters = nullptr;
+		if (stores != nullptr) {
+			delete[] stores;
+			stores = nullptr;
+		}
+		if (subClusters != nullptr) {
+			delete[] subClusters;
+			subClusters = nullptr;
+		}
 	}
 
 	void addStore(Store* s);
