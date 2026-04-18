@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <iomanip>
 #include <fstream>  
 #include <string> 
 using namespace std;
@@ -35,9 +36,9 @@ public:
 
 
 
-//==============================================
-//=================ANALYTICS CLASS==============
-//==============================================
+//+++++++++++++++++++++++++++++++
+//  Analytics Class
+//+++++++++++++++++++++++++++++++
 
 
 
@@ -139,11 +140,23 @@ public:
 	void computeForecast(const Analytics& a);
 	
 	
-	friend ostream& operator<< (ostream& out, const Forecast& obj)
+	friend ostream& operator<<(ostream& out, const Forecast& obj)
 	{
-		out << "Prediction Sales : " << obj.predictedSales << endl;
-		out << "Confidence Level : " << obj.confidenceLevel << endl;
-		out << "Warning Flag : " << obj.warningFlag << endl;
+		
+
+		
+		string salesLine = "  Prediction Sales : " + to_string((int)obj.predictedSales);
+		out <<  salesLine  << endl;
+
+
+		string confLine = "  Confidence Level : " + to_string(obj.confidenceLevel).substr(0, 5) + "%";
+		out <<  confLine  << endl;
+
+	
+		string warnLine = "  Warning Flag     : ";
+		warnLine += (obj.warningFlag ? "YES - DECLINE EXPECTED!" : "NO");
+		out << warnLine  << endl;
+
 		return out;
 	}
 
@@ -278,15 +291,15 @@ public:
 	}
 	virtual void display() const override
 	{
-		cout << "Role: " << getRole() << endl;
-		cout << "Name: " << name << endl;
-		cout << "Age: " << age << endl;
-		cout << "CNIC: " << CNIC << endl;
-		cout << "Department: " << department << endl;
-		cout << "Basic Salary: " << basicSalary << endl;
-		cout << "Bonus: " << bonus << endl;
-		cout << "Total Salary: " << getSalary() << endl;
-		cout << "Region: " << region << endl;
+		cout << "  Role: " << getRole() << endl;
+		cout << "  Name: " << name << endl;
+		cout << "  Age: " << age << endl;
+		cout << "  CNIC: " << CNIC << endl;
+		cout << "  Department: " << department << endl;
+		cout << "  Basic Salary: " << basicSalary << endl;
+		cout << "  Bonus: " << bonus << endl;
+		cout << "  Total Salary: " << getSalary() << endl;
+		cout << "  Region: " << region << endl;
 	}
 
 

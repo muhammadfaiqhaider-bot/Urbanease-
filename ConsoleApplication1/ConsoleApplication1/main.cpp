@@ -49,7 +49,7 @@ int main()
     }
     nationalReport.sortOnCompositeScore();
 
-    ++nationalReport; // Increment operator requirement
+    ++nationalReport; 
 
 
 label:
@@ -88,22 +88,25 @@ label:
         break;
         break;
     case 3:   system("cls");
-        cout << "====================================================================" << endl;
-        cout << "                     FORECASTING FOR FIRST ALL STORES " << endl;
-        cout << "====================================================================" << endl;
-        for (int i = 0;i < 50; i++)
+        cout << "=======================================================" << endl;
+        cout << "         FORECASTING FOR  ALL STORES " << endl;
+        cout << "=======================================================" << endl;
+        cout << endl;
+        for (int i = 0;i < storeCount; i++)
         {
-            cout << "************************* STORE " << i + 1 << " *******************************" << endl;
+            cout << "                      ---------" << endl;
+            cout << "<********************|STORE " << i + 1 << "|***************************>" << endl;
+            cout << "                      ---------" << endl;
             stores[i].getForecast().computeForecast(stores[i].getAnalytics());
-            cout << "\nForecast for " << stores[i].getStoreName() << ":\n" << stores[i].getForecast() << endl;
-
-
-
-            cout << "-----------------------------------" << endl;
-            cout << "MANAGER INFO" << endl;
-            cout << "-----------------------------------" << endl;
+            cout << "  Forecast for ->[" << stores[i].getStoreName() << " Branch] " << endl;
+            cout << stores[i].getForecast();
+            cout << " <----------------->" << endl;
+            cout << "  MANAGER INFO" << endl;
+            cout << " <----------------->" << endl;
             Person* ptr = &stores[i].getManager();
             ptr->display();
+            cout << "<--------------------------------------------------------->" << endl;
+            cout << endl << endl << endl;
           
             
         }
